@@ -1,0 +1,17 @@
+.library {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, 100px);
+}
+
+.book-cover {
+  background-color: blue;
+}
+
+.book-text {
+  color: white;
+  text-align: center;
+}
+
+.book-button {
+}
