@@ -116,28 +116,48 @@ const libraryDiv = document.querySelector(".library");
 
 const myLibrary = new Library(libraryDiv);
 
+const form = document.getElementById("book-form");
+
 newBookButton.addEventListener("click", () => {
+  form.reset();
   dialog.showModal();
 });
 
-submitButton.addEventListener("click", () => {
-  event.preventDefault();
-
+submitButton.addEventListener("click", (event) => {
   // Grab form data
-  const formData = new FormData(document.getElementById("book-form"));
-  const formJson = {};
-  for (const entry of formData.entries()) {
-    const [name, value] = entry;
-    formJson[name] = value;
-  }
-  formJson["read"] = document.getElementById("read").checked;
-  console.log(JSON.stringify(formJson));
+  const title = document.getElementById("title");
+  const author = document.getElementById("author");
+  const read = document.getElementById("read");
 
-  // Create new book and add to library
-  const book = new Book(formJson.title, formJson.author, formJson.read);
-  myLibrary.addBookToLibrary(book);
-  myLibrary.displayBooks();
-  dialog.close();
+  title.setCustomValidity("");
+  author.setCustomValidity("");
+  
+  const formJson = {
+    title: title.value,
+    author: author.value,
+    read: read.checked,
+  };
+
+  console.log(title.validity);
+  let validForm = true;
+  if (title.validity.valueMissing) {
+    title.setCustomValidity("Too short bruh.");
+    console.log("title");
+    validForm = false;
+  }
+  if (author.validity.valueMissing) {
+    author.setCustomValidity("Give a name bruh.");
+    console.log("author");
+    validForm = false;
+  }
+
+  if (validForm) {
+    // Create new book and add to library
+    const book = new Book(formJson.title, formJson.author, formJson.read);
+    myLibrary.addBookToLibrary(book);
+    myLibrary.displayBooks();
+    dialog.close();
+  }
 });
 
 myLibrary.displayBooks();
